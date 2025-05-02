@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="{{ url_for('static', filename='css/bootstrap.min.css') }}"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --python-blue: #306998;
+        --python-yellow: #ffd43b;
+        --python-blue-light: #4b8bbe;
+        --python-green: #91c93e;
+      }
+
+      body {
+        padding-top: 76px; /* Adjust for fixed navbar */
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .navbar {
+        background-color: var(--python-blue);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar-brand {
+        font-weight: bold;
+        color: var(--python-yellow) !important;
+      }
+
+      .nav-link {
+        color: white !important;
+        margin-right: 10px;
+        transition: color 0.3s;
+      }
+
+      .nav-link:hover {
+        color: var(--python-yellow) !important;
+      }
+
+      .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+
+      .active {
+        border-bottom: 3px solid var(--python-yellow);
+      }
+
+      .footer {
+        background-color: var(--python-blue-light);
+        color: white;
+        padding: 1rem 0;
+        margin-top: auto;
+      }
+
+      .card {
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      }
+      
+      .content-wrapper {
+        flex: 1 0 auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top shadow">
+      <div class="container">
+        <a
+          class="navbar-brand d-flex gap-2 align-items-center"
+          href="{{ url_for('home') }}"
+        >
+          <img
+            width="50"
+            height="auto"
+            src="{{ url_for('static', filename='img/python.png') }}"
+          />
+          <span class="" style="filter: drop-shadow(5px 5px 20px white)"
+            >Pengolahan Citra</span
+          >
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == url_for('home') %}active{% endif %}"
+                href="{{ url_for('home') }}"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == url_for('thresholding') %}active{% endif %}"
+                href="{{ url_for('thresholding') }}"
+                >Thresholding</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == url_for('edge_detection') %}active{% endif %}"
+                href="{{ url_for('edge_detection') }}"
+                >Edge Detection</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4 content-wrapper">
+      <div class="body-content">{% block content %} {% endblock %}</div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center">
+      <div class="container">
+        <p class="mb-0">Muhammad Azka Raki &ndash; 2311016110005</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+  </body>
+</html>
