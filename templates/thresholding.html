@@ -1,5 +1,59 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %}Thresholding{% endblock %}
 
 {% block content %}
-<h1>Thresholding</h1>
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Image Thresholding</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Unggah gambar untuk menerapkan thresholding binary. Proses ini mengubah gambar menjadi skala abu-abu dan menerapkan thresholding untuk membuat gambar biner.</p>
+                    
+                    <form method="POST" enctype="multipart/form-data" class="mb-4">
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Pilih Gambar:</label>
+                            <input class="form-control" type="file" id="image" name="image" accept=".jpg,.jpeg,.png" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="threshold" class="form-label">Nilai Threshold (0-255):</label>
+                            <input type="range" class="form-range" min="0" max="255" value="120" id="threshold" name="threshold" oninput="this.nextElementSibling.value = this.value">
+                            <output>120</output>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">📤 Proses Gambar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if original_image and processed_image %}
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">Gambar Orisinil</div>
+                <div class="card-body text-center">
+                    <img src="{{ url_for('static', filename='uploads/' + original_image) }}" class="img-fluid" alt="Original Image">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">Gambar Hasil Thresholding (Threshold: {{ threshold_value }})</div>
+                <div class="card-body text-center">
+                    <img src="{{ url_for('static', filename='processed/' + processed_image) }}" class="img-fluid" alt="Processed Image">
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{{ url_for('static', filename='processed/' + processed_image) }}" class="btn btn-success" download>Unduh Gambar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

@@ -1,7 +1,7 @@
 [project]
-name = "flask-app"
+name = "web-pengolahan-citra"
 version = "0.1.0"
-description = "A simple Flask application."
+description = "Website untuk melakukan pengolahan citra dengan menggunakan metode Thresholding, Edge detection, dll guna menyelesaikan tugas-tugas mata kuliah Pengolahan Citra"
 
 readme = "README.md"
 requires-python = ">=3.10"

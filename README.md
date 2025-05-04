@@ -1,23 +1,94 @@
-# Flask Template
+# Web Pengolahan Citra
 
-This sample repo contains the recommended structure for a Python Flask project. In this sample, we use `flask` to build a web application and the `pytest` to run tests.
+Aplikasi web untuk melakukan pengolahan citra digital menggunakan berbagai metode seperti Thresholding dan Edge Detection. Dibuat untuk menyelesaikan tugas mata kuliah Pengolahan Citra.
 
- For a more in-depth tutorial, see our [Flask tutorial](https://code.visualstudio.com/docs/python/tutorial-flask).
+## Fitur
 
- The code in this repo aims to follow Python style guidelines as outlined in [PEP 8](https://peps.python.org/pep-0008/).
+- **Image Thresholding**: Konversi gambar ke biner dengan threshold yang dapat disesuaikan
+- **Edge Detection**: Deteksi tepi pada gambar dengan berbagai operator:
+  - Sobel
+  - Prewitt
+  - Roberts
+  - Canny (dengan parameter threshold yang bisa disesuaikan)
 
-## Running the Sample
+## Persyaratan Sistem
 
-To successfully run this example, we recommend the following VS Code extensions:
+- Python 3.10 atau lebih tinggi
+- Browser web modern (Chrome, Firefox, Edge, dll)
 
-- [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
-- [Python Debugger](https://marketplace.visualstudio.com/items?itemName=ms-python.debugpy)
-- [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance) 
+## Cara Menjalankan Website di Localhost
 
-- Open the template folder in VS Code (**File** > **Open Folder...**)
-- Create a Python virtual environment using the **Python: Create Environment** command found in the Command Palette (**View > Command Palette**). Ensure you install dependencies found in the `pyproject.toml` file
-- Ensure your newly created environment is selected using the **Python: Select Interpreter** command found in the Command Palette
-- Run the app using the Run and Debug view or by pressing `F5`
-- To test your app, ensure you have the dependencies from `dev-requirements.txt` installed in your environment
-- Navigate to the Test Panel to configure your Python test or by triggering the **Python: Configure Tests** command from the Command Palette
-- Run tests in the Test Panel or by clicking the Play Button next to the individual tests in the `test_app.py` file
+### 1. Buat Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+### 2. Aktifkan Virtual Environment
+
+Pada Windows:
+```bash
+venv\Scripts\activate
+```
+
+Pada macOS/Linux:
+```bash
+source venv/bin/activate
+```
+
+### 3. Install Dependencies
+
+```bash
+pip install -r dev-requirements.txt
+```
+
+### 4. Jalankan Aplikasi Flask
+
+```bash
+python app.py
+```
+
+### 5. Buka Website di Browser
+
+Buka browser dan akses:
+```
+http://127.0.0.1:5000/
+```
+
+## Struktur Projek
+
+```
+web-pengolahan-citra/
+├── app.py                 # File utama aplikasi Flask
+├── static/
+│   ├── css/               # File CSS termasuk Bootstrap
+│   ├── js/                # File JavaScript termasuk Bootstrap
+│   ├── img/               # Gambar statis (logo, dll)
+│   ├── uploads/           # Folder penyimpanan gambar yang diunggah
+│   └── processed/         # Folder penyimpanan gambar hasil olahan
+├── templates/
+│   ├── base.html          # Template dasar dengan layout umum
+│   ├── home.html          # Halaman beranda
+│   ├── thresholding.html  # Halaman metode thresholding
+│   └── edge_detection.html # Halaman metode edge detection
+├── requirements.txt       # Daftar dependensi utama
+└── dev-requirements.txt   # Daftar dependensi termasuk untuk development
+```
+
+## Cara Penggunaan
+
+1. Buka halaman beranda aplikasi
+2. Pilih metode pengolahan citra yang ingin digunakan (Thresholding atau Edge Detection)
+3. Unggah gambar
+4. Atur parameter sesuai kebutuhan
+5. Klik "Proses Gambar" untuk memproses gambar
+6. Lihat hasil pengolahan citra yang ditampilkan
+7. Anda dapat mengunduh gambar hasil pengolahan dengan mengklik tombol "Unduh Gambar"
+
+## Developer
+
+- Muhammad Azka Raki (2311016110005)
+
+---
+
+Dibuat dengan Python, Flask, OpenCV, dan Bootstrap.

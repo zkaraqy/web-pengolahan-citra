@@ -1,5 +1,96 @@
 {% extends 'base.html' %}
 
+{% block title %}Edge Detection{% endblock %}
+
 {% block content %}
-<h1>Edge Detection</h1>
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Edge Detection</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Unggah gambar dan pilih metode pendeteksian tepi untuk menyorot tepi dalam gambar.</p>
+                    
+                    <form method="POST" enctype="multipart/form-data" class="mb-4">
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Pilih Gambar:</label>
+                            <input class="form-control" type="file" id="image" name="image" accept=".jpg,.jpeg,.png" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="operator" class="form-label">Pilih Edge Detection Operator:</label>
+                            <select class="form-select" id="operator" name="operator" onchange="toggleCannyParams()">
+                                <option value="sobel">Sobel</option>
+                                <option value="prewitt">Prewitt</option>
+                                <option value="roberts">Roberts</option>
+                                <option value="canny">Canny</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Canny parameters, hidden by default -->
+                        <div id="canny-params" style="display: none;">
+                            <div class="mb-3">
+                                <label for="threshold1" class="form-label">Lower Threshold (0-255):</label>
+                                <input type="range" class="form-range" min="0" max="255" value="100" id="threshold1" name="threshold1" oninput="this.nextElementSibling.value = this.value">
+                                <output>100</output>
+                            </div>
+                            <div class="mb-3">
+                                <label for="threshold2" class="form-label">Upper Threshold (0-255):</label>
+                                <input type="range" class="form-range" min="0" max="255" value="200" id="threshold2" name="threshold2" oninput="this.nextElementSibling.value = this.value">
+                                <output>200</output>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">📤 Proses Gambar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if original_image and processed_image %}
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">Gambar Orisinil</div>
+                <div class="card-body text-center">
+                    <img src="{{ url_for('static', filename='uploads/' + original_image) }}" class="img-fluid" alt="Original Image">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    Edge Detection: {{ operator }}
+                    {% if operator == 'Canny' %}
+                    (Lower: {{ threshold1 }}, Upper: {{ threshold2 }})
+                    {% endif %}
+                </div>
+                <div class="card-body text-center">
+                    <img src="{{ url_for('static', filename='processed/' + processed_image) }}" class="img-fluid" alt="Edge Detected Image">
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{{ url_for('static', filename='processed/' + processed_image) }}" class="btn btn-success" download>Unduh Gambar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function toggleCannyParams() {
+        var operator = document.getElementById('operator').value;
+        var cannyParams = document.getElementById('canny-params');
+        
+        if (operator === 'canny') {
+            cannyParams.style.display = 'block';
+        } else {
+            cannyParams.style.display = 'none';
+        }
+    }
+</script>
 {% endblock %}
