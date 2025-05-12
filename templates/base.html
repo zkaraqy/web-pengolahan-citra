@@ -9,6 +9,11 @@
       href="{{ url_for('static', filename='css/bootstrap.min.css') }}"
       rel="stylesheet"
     />
+    <!-- Bootstrap Icons -->
+    <link 
+      rel="stylesheet" 
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
     <style>
       :root {
         --python-blue: #306998;
@@ -103,25 +108,26 @@
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path == url_for('home') %}active{% endif %}"
-                href="{{ url_for('home') }}"
-                >Home</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
                 class="nav-link {% if request.path == url_for('thresholding') %}active{% endif %}"
                 href="{{ url_for('thresholding') }}"
-                >Thresholding</a
+                >Tugas 1</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.path == url_for('edge_detection') %}active{% endif %}"
                 href="{{ url_for('edge_detection') }}"
-                >Edge Detection</a
+                >Tugas 2</a
               >
             </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == url_for('morfologi') %}active{% endif %}"
+                href="{{ url_for('morfologi') }}"
+                >Tugas 3</a
+              >
+            </li>
+            
           </ul>
         </div>
       </div>

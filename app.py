@@ -26,6 +26,47 @@ def allowed_file(filename):
 def home():
     return render_template("home.html")
 
+@app.route("/morfologi", methods=['GET', 'POST'])
+def morfologi():
+    if request.method == 'POST':
+        if 'image' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        
+        file = request.files['image']
+        
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            unique_filename = f"{uuid.uuid4().hex}_{filename}"
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+            file.save(filepath)
+            
+            # Ambil parameter morfologi dari form
+            operation = request.form.get('operation', 'erosion')
+            kernel_shape = request.form.get('kernel_shape', 'square')
+            kernel_size = int(request.form.get('kernel_size', 5))
+            iterations = int(request.form.get('iterations', 1))
+            
+            # Proses morfologi
+            processed_filename = apply_morphology(filepath, unique_filename, operation, kernel_shape, kernel_size, iterations)
+            # Berikan nama file dan parameter ke template
+            context = {
+                'original_image': unique_filename,
+                'processed_image': processed_filename,
+                'operation': operation.capitalize(),
+                'kernel_shape': kernel_shape.capitalize(),
+                'kernel_size': kernel_size,
+                'iterations': iterations
+            }
+                
+            return render_template('morfologi.html', **context)
+    
+    return render_template("morfologi.html")
+
 @app.route("/thresholding", methods=['GET', 'POST'])
 def thresholding():
     if request.method == 'POST':
@@ -160,6 +201,47 @@ def apply_edge_detection(image_path, filename, operator='sobel', threshold1=100,
     
     # Simpan gambar yang sudah diproses
     processed_filename = f"edge_{operator}_{filename}"
+    processed_path = os.path.join(app.config['PROCESSED_FOLDER'], processed_filename)
+    cv2.imwrite(processed_path, result)
+    
+    return processed_filename
+
+def apply_morphology(image_path, filename, operation='erosion', kernel_shape='square', kernel_size=5, iterations=1):
+    image = cv2.imread(image_path)
+    
+    # Konversi gambar ke skala abu-abu
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Terapkan thresholding untuk mendapatkan citra biner
+    _, binary = cv2.threshold(gray_image, 204, 255, cv2.THRESH_BINARY) # nilai 204 ~ 0.8*255
+    
+    # Invert citra biner
+    binary = cv2.bitwise_not(binary)
+    
+    # Buat kernel sesuai bentuk yang dipilih
+    if kernel_shape == 'rectangle':
+        # Persegi panjang dengan width = 2*size, height = size
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size*2, kernel_size))
+    elif kernel_shape == 'diamond':
+        # Diamond/diamond shape
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size, kernel_size))
+    elif kernel_shape == 'octagon':
+        # Oktagon (mendekati dengan cross)
+        kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (kernel_size, kernel_size))
+    else:  # 'square' (default)
+        # Persegi
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size))
+    
+    # Terapkan operasi morfologi sesuai parameter yang dipilih
+    if operation == 'erosion':
+        # Erosi
+        result = cv2.erode(binary, kernel, iterations=iterations)
+    else:  # 'dilation' (default)
+        # Dilasi
+        result = cv2.dilate(binary, kernel, iterations=iterations)
+    
+    # Simpan gambar yang sudah diproses
+    processed_filename = f"morf_{operation}_{kernel_shape}_{filename}"
     processed_path = os.path.join(app.config['PROCESSED_FOLDER'], processed_filename)
     cv2.imwrite(processed_path, result)
     

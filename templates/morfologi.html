@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Operasi Morfologi{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2>Operasi Morfologi - Erosi dan Dilasi</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Unggah gambar untuk melakukan operasi erosi dan dilasi pada citra digital.</p>
+                    
+                    <form method="POST" enctype="multipart/form-data" class="mb-4">
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Pilih Gambar:</label>
+                            <input class="form-control" type="file" id="image" name="image" accept=".jpg,.jpeg,.png" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="operation" class="form-label">Jenis Operasi:</label>
+                                <select class="form-select" id="operation" name="operation">
+                                    <option value="erosion">Erosi</option>
+                                    <option value="dilation">Dilasi</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <label for="kernel_shape" class="form-label">Bentuk Kernel:</label>
+                                <select class="form-select" id="kernel_shape" name="kernel_shape">
+                                    <option value="square">Square</option>
+                                    <option value="diamond">Diamond</option>
+                                    <option value="rectangle">Rectangle</option>
+                                    <option value="octagon">Octagon</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <label for="kernel_size" class="form-label">Ukuran Kernel:</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" min="1" max="25" value="5" id="kernel_size" name="kernel_size">
+                                    <span class="input-group-text">pixel</span>
+                                </div>
+                                <div class="form-text">Nilai ganjil (3, 5, 7, dst.)</div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <label for="iterations" class="form-label">Jumlah Iterasi:</label>
+                                <input type="number" class="form-control" min="1" max="10" value="1" id="iterations" name="iterations">
+                                <div class="form-text">Semakin besar, efek semakin kuat</div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary px-4 py-2">
+                                <i class="bi bi-gear-fill me-2"></i>Proses Gambar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if original_image and processed_image %}
+    <div class="row mt-4">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow">
+                <div class="card-header bg-info text-white">
+                    <h4>Gambar Asli</h4>
+                </div>
+                <div class="card-body text-center">
+                    <img src="{{ url_for('static', filename='uploads/' + original_image) }}" class="img-fluid rounded" alt="Original Image">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow">                <div class="card-header bg-success text-white">
+                    <h4>Hasil {{ operation }} (Bentuk Kernel: {{ kernel_shape }}, Ukuran: {{ kernel_size }}x{{ kernel_size }}, Iterasi: {{ iterations }})</h4>
+                </div>
+                <div class="card-body text-center">
+                    <img src="{{ url_for('static', filename='processed/' + processed_image) }}" class="img-fluid rounded" alt="Processed Image">
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{{ url_for('static', filename='processed/' + processed_image) }}" class="btn btn-success" download>
+                        <i class="bi bi-download me-2"></i>Unduh Gambar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
