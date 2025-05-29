@@ -1,0 +1,240 @@
+{% extends "base.html" %} {% block title %}Operasi Morfologi Lanjutan{% endblock
+%} {% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h2>Operasi Morfologi Lanjutan</h2>
+        </div>
+        <div class="card-body">
+          <p class="lead">
+            Unggah gambar untuk melakukan operasi morfologi lanjutan pada citra
+            digital.
+          </p>
+
+          <form method="POST" enctype="multipart/form-data" class="mb-4">
+            <div class="mb-3">
+              <label for="image" class="form-label">Pilih Gambar:</label>
+              <input
+                class="form-control"
+                type="file"
+                id="image"
+                name="image"
+                accept=".jpg,.jpeg,.png"
+                required
+              />
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="operation" class="form-label">Jenis Operasi:</label>
+                <select
+                  class="form-select"
+                  id="operation"
+                  name="operation"
+                  onchange="toggleParams()"
+                >
+                  <option value="skeleton">Skeletonizing</option>
+                  <option value="thickening">Thickening</option>
+                  <option value="filling">Region Filling</option>
+                  <option value="convex">Convex Hull</option>
+                  <option value="boundary">Boundary Extraction</option>
+                  <option value="thinning">Thinning</option>
+                  <option value="pruning">Pruning (Spur Removal)</option>
+                </select>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label for="threshold" class="form-label"
+                  >Nilai Threshold:</label
+                >
+                <div class="input-group">
+                  <input
+                    type="number"
+                    class="form-control"
+                    min="0.1"
+                    max="0.9"
+                    step="0.1"
+                    value="0.5"
+                    id="threshold"
+                    name="threshold"
+                  />
+                </div>
+                <div class="form-text">Nilai batas biner (0.1 - 0.9)</div>
+              </div>
+
+              <div class="col-md-4 mb-3" id="iterations-group">
+                <label for="iterations" class="form-label"
+                  >Jumlah Iterasi:</label
+                >
+                <select class="form-select" id="iterations" name="iterations">
+                  <option value="-1">Inf (Hingga Konvergen)</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                </select>
+                <div class="form-text">
+                  Hingga konvergen atau jumlah tertentu
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary px-4 py-2">
+                <i class="bi bi-gear-fill me-2"></i>Proses Gambar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if original_image and processed_image %}
+  <div class="row mt-4">
+    <div class="col-md-6 mb-4">
+      <div class="card h-100 shadow">
+        <div class="card-header bg-info text-white">
+          <h4>Gambar Asli</h4>
+        </div>
+        <div class="card-body text-center">
+          <img
+            src="{{ url_for('static', filename='uploads/' + original_image) }}"
+            class="img-fluid rounded"
+            alt="Original Image"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mb-4">
+      <div class="card h-100 shadow">
+        <div class="card-header bg-success text-white">
+          <h4>Hasil</h4>
+        </div>
+        <div class="card-body text-center">
+          <img
+            src="{{ url_for('static', filename='processed/' + processed_image) }}"
+            class="img-fluid rounded"
+            alt="Processed Image"
+          />
+        </div>
+        <div class="card-footer text-center">
+          <a
+            href="{{ url_for('static', filename='processed/' + processed_image) }}"
+            class="btn btn-success"
+            download
+          >
+            <i class="bi bi-download me-2"></i>Unduh Gambar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if operation == 'Convex' or operation == 'convex' %}
+  <div class="row mt-4">
+    <div class="col-md-12 mb-4">
+      <div class="card h-100 shadow">
+        <div class="card-header bg-primary text-white">
+          <h4>Visualisasi Berwarna</h4>
+        </div>
+        <div class="card-body text-center">
+          <img
+            src="{{ url_for('static', filename='processed/morf_adv_convex_color_' + original_image) }}"
+            class="img-fluid rounded"
+            alt="Colored Visualization"
+          />
+        </div>
+        <div class="card-footer text-center">
+          <a
+            href="{{ url_for('static', filename='processed/morf_adv_convex_color_' + original_image) }}"
+            class="btn btn-primary"
+            download
+          >
+            <i class="bi bi-download me-2"></i>Unduh Gambar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %} {% endif %}
+</div>
+
+<script>
+  function toggleParams() {
+    const operation = document.getElementById("operation").value;
+    const iterationsGroup = document.getElementById("iterations-group");
+    const thresholdGroup = document.querySelector(
+      'label[for="threshold"]'
+    ).parentNode;
+    const thresholdLabel = document.querySelector('label[for="threshold"]');
+    const thresholdHint = document.querySelector("div.form-text");
+
+    // Pengaturan parameter berdasarkan operasi
+    if (
+      operation === "filling" ||
+      operation === "convex" ||
+      operation === "boundary" ||
+      operation === "thinning" ||
+      operation === "pruning"
+    ) {
+      iterationsGroup.style.display = "none";
+    } else {
+      iterationsGroup.style.display = "block";
+    }
+
+    // Sesuaikan label dan deskripsi threshold berdasarkan operasi
+    if (operation === "thickening") {
+      thresholdLabel.textContent = "Nilai Threshold:";
+      thresholdHint.textContent =
+        "Nilai batas biner (0.1 - 0.9) - Nilai lebih tinggi berarti objek lebih tipis";
+      document.getElementById("threshold").value = "0.5"; // Nilai default yang lebih baik untuk thickening
+    } else if (operation === "skeleton") {
+      thresholdLabel.textContent = "Nilai Threshold:";
+      thresholdHint.textContent =
+        "Nilai batas biner (0.1 - 0.9) - Nilai lebih rendah menghasilkan skeleton lebih detail";
+      document.getElementById("threshold").value = "0.5"; // Nilai default yang lebih baik untuk skeleton
+    } else if (operation === "convex") {
+      thresholdLabel.textContent = "Nilai Threshold Edge:";
+      thresholdHint.textContent = "Nilai batas untuk deteksi tepi (0.1 - 0.9)";
+      document.getElementById("threshold").value = "0.5";
+    } else if (operation === "boundary" || operation === "thinning" || operation === "pruning") {
+      thresholdLabel.textContent = "Nilai Threshold:";
+      thresholdHint.textContent =
+        "Nilai batas biner (0.1 - 0.9) untuk konversi awal ke citra biner.";
+      document.getElementById("threshold").value = "0.5"; // Default threshold
+    } else { // filling
+      thresholdLabel.textContent = "Nilai Threshold:";
+      thresholdHint.textContent =
+        "Nilai batas biner (0.1 - 0.9) - Nilai lebih rendah membuat lebih banyak objek terdeteksi";
+      document.getElementById("threshold").value = "0.5"; // Nilai default optimal untuk filling
+    }
+  }
+
+  // Fungsi untuk menampilkan informasi bantuan (dimatikan sesuai permintaan)
+  function showOperationHelp() {
+    // Fungsi ini dinonaktifkan untuk menyembunyikan label informasi metode
+    return;
+  }
+
+  // Panggil fungsi saat halaman dimuat dan saat operasi berubah
+  document.addEventListener("DOMContentLoaded", function () {
+    toggleParams();
+
+    // Hapus elemen bantuan yang mungkin sudah ada
+    const existingHelpText = document.getElementById("operation-help");
+    if (existingHelpText) {
+      existingHelpText.remove();
+    }
+
+    // Tambahkan event listener untuk perubahan operasi
+    document
+      .getElementById("operation")
+      .addEventListener("change", function () {
+        toggleParams();
+      });
+  });
+</script>
+{% endblock %}
