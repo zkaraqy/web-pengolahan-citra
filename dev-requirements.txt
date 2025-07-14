@@ -1,6 +1,7 @@
 -r requirements.txt
 pytest
 flask
-opencv-python
+opencv-python-headless
+opencv-contrib-python-headless
 numpy
 pillow
