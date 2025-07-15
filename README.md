@@ -1,94 +1,100 @@
-# Web Pengolahan Citra
+# Advanced Digital Image Processing Web Application
 
-Aplikasi web untuk melakukan pengolahan citra digital menggunakan berbagai metode seperti Thresholding dan Edge Detection. Dibuat untuk menyelesaikan tugas mata kuliah Pengolahan Citra.
+This project is a web-based application for advanced digital image processing, developed as the Final Project (UAS) for the Digital Image Processing course at university. The application enables users to perform a variety of morphological and edge detection operations on images through an intuitive web interface.
 
-## Fitur
+## What is this project?
+This website allows users to upload images and apply a wide range of image processing techniques, including:
+- **Basic Morphological Operations**: Erosion, Dilation
+- **Advanced Morphological Operations**: Skeletonization, Thickening, Filling, Convex Hull, Boundary Extraction, Thinning, Pruning (Spur Removal)
+- **Thresholding**: Convert images to binary using adjustable thresholds
+- **Edge Detection**: Sobel, Prewitt, Roberts, and Canny operators
 
-- **Image Thresholding**: Konversi gambar ke biner dengan threshold yang dapat disesuaikan
-- **Edge Detection**: Deteksi tepi pada gambar dengan berbagai operator:
-  - Sobel
-  - Prewitt
-  - Roberts
-  - Canny (dengan parameter threshold yang bisa disesuaikan)
+## Why was this project created?
+This project was created as a practical implementation of the concepts learned in the Digital Image Processing course. It serves as a demonstration of understanding and applying various image processing algorithms, and provides a user-friendly platform for experimenting with these techniques. The project also aims to help other students and practitioners learn about digital image processing through hands-on interaction.
 
-## Persyaratan Sistem
+## Who developed this project?
+- **Author:** Muhammad Azka Raki
+- **Course:** Digital Image Processing (Pengolahan Citra)
+- **Purpose:** Final Project (UAS)
 
-- Python 3.10 atau lebih tinggi
-- Browser web modern (Chrome, Firefox, Edge, dll)
+## How does the website work?
+The website is built using Python, Flask, OpenCV, and Bootstrap. Users can:
+1. Access the website via a browser
+2. Choose the desired image processing method (Morphology, Thresholding, Edge Detection, etc.)
+3. Upload an image
+4. Adjust parameters as needed (e.g., threshold value, kernel size, operation type)
+5. Process the image and view the results instantly
+6. Download the processed image for further use
 
-## Cara Menjalankan Website di Localhost
+All image processing is performed on the server using OpenCV, and results are displayed in real-time on the web interface.
 
-### 1. Buat Virtual Environment
+## Installation & Local Running Guide
 
+### Prerequisites
+- Python 3.10 or higher
+- Git (optional, for cloning the repository)
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/zkaraqy/web-pengolahan-citra.git
+cd web-pengolahan-citra
+```
+
+### 2. Create a Virtual Environment
 ```bash
 python -m venv venv
 ```
 
-### 2. Aktifkan Virtual Environment
+### 3. Activate the Virtual Environment
+- On Windows:
+  ```bash
+  venv\Scripts\activate
+  ```
+- On macOS/Linux:
+  ```bash
+  source venv/bin/activate
+  ```
 
-Pada Windows:
-```bash
-venv\Scripts\activate
-```
-
-Pada macOS/Linux:
-```bash
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
-
+### 4. Install Dependencies
 ```bash
 pip install -r dev-requirements.txt
 ```
 
-### 4. Jalankan Aplikasi Flask
-
+### 5. Run the Flask Application
 ```bash
 python app.py
 ```
 
-### 5. Buka Website di Browser
-
-Buka browser dan akses:
+### 6. Open the Website
+Open your browser and go to:
 ```
 http://127.0.0.1:5000/
 ```
 
-## Struktur Projek
-
+## Project Structure
 ```
 web-pengolahan-citra/
-├── app.py                 # File utama aplikasi Flask
+├── app.py                 # Main Flask application
 ├── static/
-│   ├── css/               # File CSS termasuk Bootstrap
-│   ├── js/                # File JavaScript termasuk Bootstrap
-│   ├── img/               # Gambar statis (logo, dll)
-│   ├── uploads/           # Folder penyimpanan gambar yang diunggah
-│   └── processed/         # Folder penyimpanan gambar hasil olahan
+│   ├── css/               # CSS files (Bootstrap, etc.)
+│   ├── js/                # JavaScript files
+│   ├── img/               # Static images (logo, etc.)
+│   ├── uploads/           # Uploaded images
+│   └── processed/         # Processed images
 ├── templates/
-│   ├── base.html          # Template dasar dengan layout umum
-│   ├── home.html          # Halaman beranda
-│   ├── thresholding.html  # Halaman metode thresholding
-│   └── edge_detection.html # Halaman metode edge detection
-├── requirements.txt       # Daftar dependensi utama
-└── dev-requirements.txt   # Daftar dependensi termasuk untuk development
+│   ├── base.html          # Base template
+│   ├── home.html          # Home page
+│   ├── morfologi.html     # Basic morphology page
+│   ├── morfologi_lanjutan.html # Advanced morphology page
+│   ├── thresholding.html  # Thresholding page
+│   └── edge_detection.html # Edge detection page
+├── requirements.txt       # Main dependencies
+├── dev-requirements.txt   # Development dependencies
+├── packages.txt           # System dependencies (for cloud deployment)
+└── README.md              # Project documentation
 ```
 
-## Cara Penggunaan
-
-1. Buka halaman beranda aplikasi
-2. Pilih metode pengolahan citra yang ingin digunakan (Thresholding atau Edge Detection)
-3. Unggah gambar
-4. Atur parameter sesuai kebutuhan
-5. Klik "Proses Gambar" untuk memproses gambar
-6. Lihat hasil pengolahan citra yang ditampilkan
-7. Anda dapat mengunduh gambar hasil pengolahan dengan mengklik tombol "Unduh Gambar"
-
-## Developer
-
-- Muhammad Azka Raki (2311016110005)
+## License
+This project is for educational purposes only.
 
 ---
-
-Dibuat dengan Python, Flask, OpenCV, dan Bootstrap.
